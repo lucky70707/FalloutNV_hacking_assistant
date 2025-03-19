@@ -1,4 +1,4 @@
-use std::collections::hash_set;
+
 use std::io::Write;
 use std::{collections::HashSet, fs::File, io};
 
@@ -21,20 +21,30 @@ fn main() {
     let output = serialize_to_json(words, length);
     write_to_file(output);
 }
+#[test]
+
+    fn validate_json_serialization(){
+        let mut words: HashSet<String> = HashSet::new();
+        words.insert("ceiling".to_string());
+        words.insert("special".to_string());
+        words.insert("looking".to_string());
+        let length : usize = "ceiling".len();
+        let output = serialize_to_json(words, length);
+    }
+
 
 fn serialize_to_json(words: HashSet<String>, length: usize)->String{
+    let words: Vec<String> = words.into_iter().collect();
+    let test = serde_json::Value::from(words);
     let json_text = json!({
-        format!("length{length}"):[
-            "quality",
-            "cleaning",
-            "enemies"
-        ]
+        format!("length{length}"):
+            test      
     });
-
-    println!("{json_text}");
-
+   
+    //println!("{json_text}");
+    //println!("test: {test}");
     
-    "hi".to_string()
+    json_text.to_string()
 }
 
 fn write_to_file(output: String) -> std::io::Result<()>{
@@ -93,10 +103,5 @@ mod tests {
         let length = input.len();
     }
 
-    #[test]
-    fn validate_json_serialization(){
-        let words = HashSet::new();
-        let length : usize = 8;
-        let output = serialize_to_json(words, length);
-    }
+    
 }
