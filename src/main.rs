@@ -1,18 +1,36 @@
-use std::{collections::HashSet, io};
+use std::collections::hash_set;
+use std::io::Write;
+use std::{collections::HashSet, fs::File, io};
 
 fn main() {
     let instruction: String = "Write down all the words and write 'f' when finished".to_string();
     println!("{instruction}");
-    let mut words: HashSet<_> = HashSet::new();
+
     let input = process_input();
     let length: usize = input.len();
 
-    words = validate_words_input(input, length);
+    let words: HashSet<String> = validate_words_input(input, length);
 
     println!("The words included are: ");
-    for word in words {
+    for word in &words {
         println!("{word}");
     }
+
+    let output = serialize_to_json(words);
+    write_to_file(output);
+}
+
+fn serialize_to_json(word: HashSet<String>)->String{
+
+    "hi".to_string()
+}
+
+fn write_to_file(output: String) -> std::io::Result<()>{
+    let mut file = File::create("test.txt")?;
+    let output=output;   
+    println!("{output}");
+    file.write_all(output.as_bytes())?;
+    Ok(())
 }
 
 fn validate_words_input(input: String, length: usize) -> HashSet<String> {
@@ -20,7 +38,7 @@ fn validate_words_input(input: String, length: usize) -> HashSet<String> {
     let mut words: HashSet<_> = HashSet::new();
 
     while input.ne("f") {
-        if validate_single_word(&input, length){
+        if validate_single_word(&input, length) {
             words.insert(input);
         }
         input = process_input();
@@ -29,7 +47,7 @@ fn validate_words_input(input: String, length: usize) -> HashSet<String> {
     words
 }
 
-fn validate_single_word(input: &String, length:usize)->bool{
+fn validate_single_word(input: &String, length: usize) -> bool {
     if input.len() == length {
         true
     } else {
