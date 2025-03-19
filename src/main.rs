@@ -3,7 +3,17 @@ use std::io::Write;
 use std::{collections::HashSet, fs::File, io};
 
 use serde_json::json;
+//TODO
+//function that gets all values from saved_words.json or creates saved_words.json if it doesn't exist
+//the values from the array that equal the length of user words being added are to be converted into a hashset
+//the hashset of current user values and old user values of the same length are to be combined upon completion of user input
+//the updated list of values should be saved together with the old values of other lengths
+//core functionality for the assistance should be added.
+//move functionality to lib.rs and other files
+//add GUI functionality using slint
 
+//NOTE
+//can test out efficacy of program with https://jetholt.com/hacking/
 fn main() {
     let instruction: String = "Write down all the words and write 'f' when finished".to_string();
     println!("{instruction}");
@@ -19,7 +29,11 @@ fn main() {
     }
 
     let output = serialize_to_json(words, length);
-    write_to_file(output);
+    let result = write_to_file(output);
+    result.unwrap_err()
+    {
+        println!("Writing to file failed");
+    }
 }
 #[test]
 
@@ -29,7 +43,7 @@ fn main() {
         words.insert("special".to_string());
         words.insert("looking".to_string());
         let length : usize = "ceiling".len();
-        let output = serialize_to_json(words, length);
+        serialize_to_json(words, length);
     }
 
 
@@ -58,12 +72,14 @@ fn write_to_file(output: String) -> std::io::Result<()>{
 fn validate_words_input(input: String, length: usize) -> HashSet<String> {
     let mut input = input;
     let mut words: HashSet<_> = HashSet::new();
-    let mut log:String;
-    let already_exists_error= "word {} has already been inserted before.".to_string();
+   // let mut log:String;
+    //let already_exists_error= "word {} has already been inserted before.".to_string();
 
     while input.ne("f") {
         if validate_single_word(&input, length) {
-            words.insert(input);
+            words.insert(input) ;
+              //  log.push(format!(already_exists_error,input));
+            
         }
         input = process_input();
     }
