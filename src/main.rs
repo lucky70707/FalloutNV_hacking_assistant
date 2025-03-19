@@ -2,6 +2,8 @@ use std::collections::hash_set;
 use std::io::Write;
 use std::{collections::HashSet, fs::File, io};
 
+use serde_json::json;
+
 fn main() {
     let instruction: String = "Write down all the words and write 'f' when finished".to_string();
     println!("{instruction}");
@@ -16,12 +18,22 @@ fn main() {
         println!("{word}");
     }
 
-    let output = serialize_to_json(words);
+    let output = serialize_to_json(words, length);
     write_to_file(output);
 }
 
-fn serialize_to_json(word: HashSet<String>)->String{
+fn serialize_to_json(words: HashSet<String>, length: usize)->String{
+    let json_text = json!({
+        format!("length{length}"):[
+            "quality",
+            "cleaning",
+            "enemies"
+        ]
+    });
 
+    println!("{json_text}");
+
+    
     "hi".to_string()
 }
 
@@ -36,6 +48,8 @@ fn write_to_file(output: String) -> std::io::Result<()>{
 fn validate_words_input(input: String, length: usize) -> HashSet<String> {
     let mut input = input;
     let mut words: HashSet<_> = HashSet::new();
+    let mut log:String;
+    let already_exists_error= "word {} has already been inserted before.".to_string();
 
     while input.ne("f") {
         if validate_single_word(&input, length) {
@@ -43,6 +57,8 @@ fn validate_words_input(input: String, length: usize) -> HashSet<String> {
         }
         input = process_input();
     }
+
+
 
     words
 }
@@ -67,9 +83,20 @@ fn process_input() -> String {
 
 #[cfg(test)]
 mod tests {
+    use std::collections::HashSet;
+
+    use crate::serialize_to_json;
+
     #[test]
     fn input_validation_test() {
         let input = "healing".to_string();
         let length = input.len();
+    }
+
+    #[test]
+    fn validate_json_serialization(){
+        let words = HashSet::new();
+        let length : usize = 8;
+        let output = serialize_to_json(words, length);
     }
 }

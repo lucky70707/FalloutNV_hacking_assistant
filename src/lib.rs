@@ -3,8 +3,11 @@ use std::{error::Error, fs::{self, File}, io::Write};
 fn run(){
     let contents = open_saved_words_file().unwrap();
     let length: usize = 7;
-    let mut words: Vec<String> = get_words_by_length(length, contents).unwrap();
+   // let mut words: Vec<String> = get_words_by_length(length, contents).unwrap();
 }
+
+
+
 
 
 fn overwrite_words_json(){
@@ -20,7 +23,7 @@ fn open_saved_words_file() -> Result<String, Box<dyn Error>> {
     let contents = fs::read_to_string(file)?;
     Ok(contents)
 }
-
+/*
 fn get_words_by_length(length: usize, contents: String) -> Result<Vec<String>, String> {
     let mut parsed = serde_json::Deserializer::from_str(&contents);
     let index = format!("length{length}");
@@ -29,11 +32,11 @@ fn get_words_by_length(length: usize, contents: String) -> Result<Vec<String>, S
 
     Ok(array)
     
-}
+}*/
 
 #[cfg(test)]
 mod tests {
-    use crate::{get_words_by_length, open_saved_words_file};
+    use crate::{ open_saved_words_file};
 
 
     #[test]
