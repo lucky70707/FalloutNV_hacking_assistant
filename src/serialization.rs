@@ -16,6 +16,9 @@ impl WordsByLengths {
     pub fn get(&self, length: usize) -> &Vec<String> {
         &self.lengths[length - 4]
     }
+    pub fn set(&mut self, length: usize, list: Vec<String>){
+        self.lengths[length-4]=list;
+    }
 }
 
 //needs to deal with errors inside function, file not found error should be handled by creating the file
@@ -53,8 +56,8 @@ fn create_empty_file(path: &String) {
     let output = serialize_to_json(contents);
     
     match write_to_file(output, path.to_string()) {
-        Ok(value) => println!("file success!"),
-        Err(error) => println!("file failure"),
+        Ok(_value) => println!("file success!"),
+        Err(_error) => println!("file failure"),
     }
 }
 
@@ -105,7 +108,9 @@ pub fn process_user_inputted_words(words_inputted: HashSet<String>, word_length:
     if unique_words_length_at_start < uniqe_words_at_end {
         let uniqe_words_vec: Vec<String> = Vec::from_iter(unique_words.iter().cloned());
 
-        all_words.lengths[0] = uniqe_words_vec;
+        all_words.set(word_length, uniqe_words_vec);//I am watching you!
+        
+       
 
         let output = serialize_to_json(all_words);
 
@@ -118,7 +123,7 @@ pub fn process_user_inputted_words(words_inputted: HashSet<String>, word_length:
 
 #[cfg(test)]
 mod tests {
-    use std::{fmt::format, process::Output};
+    
 
     use super::*;
 
@@ -155,13 +160,14 @@ mod tests {
         if unique_words_length_at_start < uniqe_words_at_end {
             let uniqe_words_vec: Vec<String> = Vec::from_iter(unique_words.iter().cloned());
 
-            words_by_length.lengths[word_length] = uniqe_words_vec;
+            words_by_length.set(word_length, uniqe_words_vec);
 
             let output = serialize_to_json(words_by_length);
 
             match write_to_file(output, file) {
                 Ok(()) => (),
                 Err(err) => panic!("oh no {err}"),
+
             };
         }
     }
@@ -200,15 +206,11 @@ mod tests {
         let output = serialize_to_json(contents);
         //println!("{output}");
         match write_to_file(output, path) {
-            Ok(value) => println!("file success!"),
-            Err(error) => println!("file failure"),
+            Ok(_value) => println!("file success!"),
+            Err(_error) => println!("file failure"),
         }
     }
-    #[test]
-    fn test_debugging(){
-        let apples: Vec<i32> = vec![1,5,6,2,3,3];
-        println!("{}",apples.len());
-    }
+    
 
 }
 
