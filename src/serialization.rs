@@ -67,18 +67,16 @@ pub fn serialize_to_json(words: WordsByLengths) -> String {
         Ok(value) => value,
     };
 
-    //println!("{json_text}");
-    //println!("test: {test}");
-
     json_text
 }
 
 pub fn write_to_file(output: String, path: String) -> std::io::Result<()> {
     let mut file = File::create(path)?;
     let output = output;
-    println!("{output}");
+    
 
     file.write_all(output.as_bytes())?;
+
     Ok(())
 }
 
@@ -127,7 +125,9 @@ mod tests {
 
     use super::*;
 
-    /*opens file test.json
+    /*
+    more or less an integration test
+    opens file test.json
     gets content from test.json
     extracts multiple lists from it
     turns list with the same length into a hashmap
@@ -135,6 +135,7 @@ mod tests {
     turns hashmap back into vec
     writes all lists into test.json
      */
+    #[ignore]
     #[test]
     fn alter_file_test() {
         let file = "test3.json".to_string();
@@ -167,7 +168,6 @@ mod tests {
             match write_to_file(output, file) {
                 Ok(()) => (),
                 Err(err) => panic!("oh no {err}"),
-
             };
         }
     }
@@ -183,7 +183,7 @@ mod tests {
         let length: usize = "ceiling".len();
        // serialize_to_json(words, length);
     }
-
+    #[ignore]
     #[test]
     fn construct_test_file() {
         let path = "saved_words.json".to_string();
@@ -205,43 +205,10 @@ mod tests {
         let contents: WordsByLengths = WordsByLengths { lengths: frumble };
         let output = serialize_to_json(contents);
         //println!("{output}");
-        match write_to_file(output, path) {
-            Ok(_value) => println!("file success!"),
-            Err(_error) => println!("file failure"),
-        }
+        assert!(write_to_file(output, path).is_ok())
     }
     
 
 }
 
-/*{
-    "length4":[],
-    "length5":[],
-    "length6":[],
-    "length7":[
-        "leaving",
-        "healing",
-        "decries",
-        "quality",
-        "siphons",
-        "leading",
-        "driving",
-        "special",
-        "looking",
-        "imagine",
-        "dealing",
-        "ceiling",
-        "sealing",
-        "slavers",
-        "bracers",
-        "enemies"
-        ] ,
-    "length8":[],
-    "length9":[],
-    "length10":[],
-    "length11":[],
-    "length12":[],
-    "length13":[],
-    "length14":[],
-    "length15":[]
-} */
+

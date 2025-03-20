@@ -28,18 +28,36 @@ pub fn run() {
     //this can be done in the background with a new thread
     serialization::process_user_inputted_words(words.clone(),length);    
     
+    solve(words);
+
+    
+}
+
+fn solve(words: HashSet<String>){
     println!("Pick a word and write the word here");
     let current_word = process_input();
     println!("How many letters were correct?");
     let amount_correct = process_input().parse::<i8>().unwrap();
 
-    let remaining_words = check_word_against_list(words, current_word, amount_correct);
+    let mut remaining_words = check_word_against_list(words, current_word, amount_correct);
 
-    for word in &remaining_words {
-        println!("{word}")
+    while remaining_words.len()>1{
+        println!("Pick another word from the following list:");
+        for word in &remaining_words{
+            println!("{word}");
+        }
+        let current_word = process_input();
+        println!("How many letters were correct?");
+        let amount_correct = process_input().parse::<i8>().unwrap();
+        remaining_words = check_word_against_list( HashSet::from_iter(remaining_words.iter().cloned()), current_word, amount_correct);
+    }
+    if remaining_words.len()==1{
+        println!("correct answer is {}", remaining_words.get(0).unwrap()
+    );
+    }else{
+        println!("no valid answer");
     }
 
-    
 }
 
 fn check_word_against_list(

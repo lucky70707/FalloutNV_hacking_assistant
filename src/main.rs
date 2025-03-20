@@ -8,7 +8,7 @@
 //add GUI functionality using slint
 
 //NOTE
-//can test out efficacy of program with https://jetholt.com/hacking/ and https://pfndesign.itch.io/termlink-access
+//can test out efficacy of program with https://jetholt.com/hacking/
 
 //the words in the minigame have lengths ranging from 4 to 15 according to https://fallout.wiki/wiki/Hacking_(Fallout:_New_Vegas)
 /* 
