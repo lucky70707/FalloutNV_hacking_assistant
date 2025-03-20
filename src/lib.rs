@@ -89,7 +89,7 @@ fn validate_words_input(input: String, length: usize) -> HashSet<String> {
     // let mut log:String;
     //let already_exists_error= "word {} has already been inserted before.".to_string();
 
-    while input.ne("f") {
+    while input.ne("F") {
         if validate_single_word(&input, length) {
             words.insert(input);
             //  log.push(format!(already_exists_error,input));
@@ -115,7 +115,7 @@ fn process_input() -> String {
         .read_line(&mut input)
         .expect("Failed to read line");
     //the terminal will add characters even if you have only typed a single character, so we trim the input here
-    input.trim().to_string()
+    input.trim().to_string().to_ascii_uppercase()
 }
 
 #[cfg(test)]

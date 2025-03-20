@@ -39,18 +39,18 @@ pub fn open_saved_words_file(file: String) -> Result<String, Box<dyn Error>> {
 fn create_empty_file(path: &String) {  
     println!("creating empty file {path}");
     let frumble: [Vec<std::string::String>; 12] = [
-        vec!["".to_string()], //4
-        vec!["".to_string()], //5
-        vec!["".to_string()], //6
-        vec!["".to_string()], //7
-        vec!["".to_string()], //8
-        vec!["".to_string()], //9
-        vec!["".to_string()], //10
-        vec!["".to_string()], //11
-        vec!["".to_string()], //12
-        vec!["".to_string()], //13
-        vec!["".to_string()], //14
-        vec!["".to_string()], //15
+        vec![], //4
+        vec![], //5
+        vec![], //6
+        vec![], //7
+        vec![], //8
+        vec![], //9
+        vec![], //10
+        vec![], //11
+        vec![], //12
+        vec![], //13
+        vec![], //14
+        vec![], //15
     ];
     let contents: WordsByLengths = WordsByLengths { lengths: frumble };
     let output = serialize_to_json(contents);
