@@ -10,9 +10,6 @@
 ///NOTE
 ///can test out efficacy of program with https://jetholt.com/hacking/
 
-
-
-
 fn main() {
         fallout_hacking_assistant::run();   
     }

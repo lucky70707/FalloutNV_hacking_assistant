@@ -65,7 +65,8 @@ fn create_empty_file(path: &String) {
 }
 
 pub fn serialize_to_json(words: WordsByLengths) -> String {
-    let json_text = match serde_json::to_string(&words) {
+    
+    let json_text = match serde_json::to_string_pretty(&words) {
         Err(err) => panic!("parsing failure: {err}"),
         Ok(value) => value,
     };
@@ -104,9 +105,9 @@ pub fn process_user_inputted_words(words_inputted: HashSet<String>, word_length:
     for word in &words_inputted {
         unique_words.insert(word.clone());
     }
-    let uniqe_words_at_end = unique_words.len();
+    let unique_words_at_end = unique_words.len();
 
-    if unique_words_length_at_start < uniqe_words_at_end {
+    if unique_words_length_at_start < unique_words_at_end {
         let uniqe_words_vec: Vec<String> = Vec::from_iter(unique_words.iter().cloned());
 
         all_words.set(word_length, uniqe_words_vec);//I am watching you!
@@ -196,21 +197,20 @@ mod tests {
             vec!["truck".to_string()],                         //5
             vec!["wordle".to_string()],                        //6
             vec!["enemies".to_string(), "bracer".to_string()], //7
-            vec!["".to_string()],                              //8
-            vec!["".to_string()],                              //9
-            vec!["".to_string()],                              //10
-            vec!["".to_string()],                              //11
-            vec!["".to_string()],                              //12
-            vec!["".to_string()],                              //13
-            vec!["".to_string()],                              //14
-            vec!["".to_string()],                              //15
+            vec![],                              //8
+            vec![],                              //9
+            vec![],                              //10
+            vec![],                              //11
+            vec![],                              //12
+            vec![],                              //13
+            vec![],                              //14
+            vec![],                              //15
         ];
         let contents: WordsByLengths = WordsByLengths { lengths: frumble };
         let output = serialize_to_json(contents);
-        //println!("{output}");
+        
         assert!(write_to_file(output, path).is_ok())
     }
-    
 
 }
 
