@@ -12,26 +12,27 @@ use std::{collections::HashSet, io};
 
 use serde_json::json;
 
-pub fn run() {
+pub fn run() {  
     //let unparsed_list = open_saved_words_file().unwrap();
     let instruction: String = "Write down all the words and write 'f' when finished".to_string();
     println!("{instruction}");
 
-    let input = process_input();
+    let mut input = process_input();
     let length: usize = input.len();
-
-    let words: HashSet<String> = validate_words_input(input, length);
-
-    println!("The words included are: ");
-    for word in &words {
-        println!("{word}");
+    while input.len() < 4 ||input.len()>15{
+        if input.len()>4{
+            println!("word is too short to be valid");
+        }else {
+            println!("word is too large to be valid");
+        }
+        input = process_input();
+        
     }
-
-    let output = serialize_to_json(words.clone(), length);
-    match write_to_file(output){
-        Ok(())=>(),
-        Err(error)=>println!("problem writing to file: {error}"),
-    };
+    let words: HashSet<String> = validate_words_input(input, length);
+    
+    //this can be done in the background with a new thread
+    serialization::process_user_inputted_words(words.clone(),length);    
+    
     println!("Pick a word and write the word here");
     let current_word = process_input();
     println!("How many letters were correct?");
@@ -67,39 +68,7 @@ fn check_word_against_list(
     remaining_words_list
 }
 
-/*fn overwrite_words_json() {
-    let filename = "saved_words2.json".to_string();
-    let file = File::create(filename);
-}*/
 
-//needs to deal with errors inside function, file not found error should be handled by creating the file
-fn open_saved_words_file() -> Result<String, Box<dyn Error>> {
-    let file = "saved_words.json".to_string();
-    let contents = fs::read_to_string(file)?;
-    Ok(contents)
-}
-
-fn serialize_to_json(words: HashSet<String>, length: usize) -> String {
-    let words: Vec<String> = words.into_iter().collect();
-    let test = serde_json::Value::from(words);
-    let json_text = json!({
-        format!("length{length}"):
-            test
-    });
-
-    //println!("{json_text}");
-    //println!("test: {test}");
-
-    json_text.to_string()
-}
-
-fn write_to_file(output: String) -> std::io::Result<()> {
-    let mut file = File::create("test.json")?;
-    let output = output;
-    println!("{output}");
-    file.write_all(output.as_bytes())?;
-    Ok(())
-}
 
 fn validate_words_input(input: String, length: usize) -> HashSet<String> {
     let mut input = input;
@@ -140,11 +109,6 @@ fn process_input() -> String {
 mod tests {
     use super::*;
 
-    #[test]
-    fn test_open_saved_words_file() {
-        let contents = open_saved_words_file();
-        assert!(!contents.unwrap().is_empty())
-    }
 
     #[test]
     fn input_validation_test() {
@@ -153,14 +117,4 @@ mod tests {
         assert_eq!(true,validate_single_word(&input, length))
     }
 
-    #[test]
-
-    fn validate_json_serialization() {
-        let mut words: HashSet<String> = HashSet::new();
-        words.insert("ceiling".to_string());
-        words.insert("special".to_string());
-        words.insert("looking".to_string());
-        let length: usize = "ceiling".len();
-        serialize_to_json(words, length);
-    }
 }

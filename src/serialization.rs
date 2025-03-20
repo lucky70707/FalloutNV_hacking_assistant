@@ -2,29 +2,62 @@ use std::{
     collections::HashSet,
     error::Error,
     fs::{self, File},
-    io::Write,
+    io::{ ErrorKind, Write},
 };
 
 use serde_derive::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
-struct WordsByLengths {
-     lengths: [Vec<String>; 12],
+pub struct WordsByLengths {
+    pub lengths: [Vec<String>; 12],
 }
 
 impl WordsByLengths {
-    fn get(&self, length: usize) -> &Vec<String> {
+    pub fn get(&self, length: usize) -> &Vec<String> {
         &self.lengths[length - 4]
-    }    
+    }
 }
 
 //needs to deal with errors inside function, file not found error should be handled by creating the file
-#[allow(dead_code)]
+
 pub fn open_saved_words_file(file: String) -> Result<String, Box<dyn Error>> {
-    let contents = fs::read_to_string(file)?;
-    Ok(contents)
+    match fs::read_to_string(&file) {
+        Ok(value) => Ok(value),
+        Err(err) => {if err.kind() == ErrorKind::NotFound{
+            create_empty_file(&file);
+            open_saved_words_file(file)
+        }else {
+            panic!("{err}");
+        }}        
+    }
+    
 }
-#[allow(dead_code)]
+
+fn create_empty_file(path: &String) {  
+    println!("creating empty file {path}");
+    let frumble: [Vec<std::string::String>; 12] = [
+        vec!["".to_string()], //4
+        vec!["".to_string()], //5
+        vec!["".to_string()], //6
+        vec!["".to_string()], //7
+        vec!["".to_string()], //8
+        vec!["".to_string()], //9
+        vec!["".to_string()], //10
+        vec!["".to_string()], //11
+        vec!["".to_string()], //12
+        vec!["".to_string()], //13
+        vec!["".to_string()], //14
+        vec!["".to_string()], //15
+    ];
+    let contents: WordsByLengths = WordsByLengths { lengths: frumble };
+    let output = serialize_to_json(contents);
+    
+    match write_to_file(output, path.to_string()) {
+        Ok(value) => println!("file success!"),
+        Err(error) => println!("file failure"),
+    }
+}
+
 pub fn serialize_to_json(words: WordsByLengths) -> String {
     let json_text = match serde_json::to_string(&words) {
         Err(err) => panic!("parsing failure: {err}"),
@@ -36,8 +69,8 @@ pub fn serialize_to_json(words: WordsByLengths) -> String {
 
     json_text
 }
-#[allow(dead_code)]
-pub fn write_to_file(output: String, path:String) -> std::io::Result<()> {
+
+pub fn write_to_file(output: String, path: String) -> std::io::Result<()> {
     let mut file = File::create(path)?;
     let output = output;
     println!("{output}");
@@ -46,23 +79,41 @@ pub fn write_to_file(output: String, path:String) -> std::io::Result<()> {
     Ok(())
 }
 
-fn parse_json_struct(contents: String)->WordsByLengths{
-    match serde_json::from_str(&contents){
-        Ok(value)=> return value,
-        Err(err)=>panic!("parsing error: {err}")
+pub fn parse_json_struct(contents: String) -> WordsByLengths {
+    match serde_json::from_str(&contents) {
+        Ok(value) => return value,
+        Err(err) => panic!("parsing error: {err}"),
     };
 }
 
-#[allow(dead_code)]
-fn get_words_by_length(length: usize, contents: String) -> Result<Vec<String>, serde_json::Error> {
-    let contents = contents;
-    let string = format!("r#{}", contents);
+pub fn process_user_inputted_words(words_inputted: HashSet<String>, word_length: usize) {
+    let file = "saved_words.json".to_string();
+    let contents = match open_saved_words_file(file.clone()) {
+        Ok(value) => value,
+        Err(err) => panic!("{}", err),
+    };
+    let mut all_words: WordsByLengths = parse_json_struct(contents);
+    let mut unique_words: HashSet<String> =
+        HashSet::from_iter(all_words.get(word_length).iter().cloned());
 
-    let lengths: WordsByLengths = serde_json::from_str(&contents)?;
+    let unique_words_length_at_start = unique_words.len();
+    for word in &words_inputted {
+        unique_words.insert(word.clone());
+    }
+    let uniqe_words_at_end = unique_words.len();
 
-    let array: Vec<String> = lengths.get(length).to_vec();
+    if unique_words_length_at_start < uniqe_words_at_end {
+        let uniqe_words_vec: Vec<String> = Vec::from_iter(unique_words.iter().cloned());
 
-    Ok(array)
+        all_words.lengths[0] = uniqe_words_vec;
+
+        let output = serialize_to_json(all_words);
+
+        match write_to_file(output, file) {
+            Ok(()) => (),
+            Err(err) => panic!("oh no {err}"),
+        };
+    }
 }
 
 #[cfg(test)]
@@ -89,11 +140,11 @@ mod tests {
             Ok(value) => value,
             Err(err) => panic!("{}", err),
         };
-        
-        let mut words_by_length = parse_json_struct(contents);       
-       
-                
-        let mut unique_words: HashSet<String> = HashSet::from_iter(words_by_length.get(word_length).iter().cloned());
+
+        let mut words_by_length: WordsByLengths = parse_json_struct(contents);
+
+        let mut unique_words: HashSet<String> =
+            HashSet::from_iter(words_by_length.get(word_length).iter().cloned());
         let unique_words_length_at_start = unique_words.len();
         for word in words_inputted {
             println!("{word}");
@@ -101,30 +152,40 @@ mod tests {
         }
         let uniqe_words_at_end = unique_words.len();
 
-        if unique_words_length_at_start < uniqe_words_at_end{
+        if unique_words_length_at_start < uniqe_words_at_end {
             let uniqe_words_vec: Vec<String> = Vec::from_iter(unique_words.iter().cloned());
 
-            words_by_length.lengths[0]=uniqe_words_vec;
+            words_by_length.lengths[word_length] = uniqe_words_vec;
 
             let output = serialize_to_json(words_by_length);
 
-            match write_to_file(output, file){
-                Ok(())=>(),
-                Err(err)=>panic!("oh no {err}")
+            match write_to_file(output, file) {
+                Ok(()) => (),
+                Err(err) => panic!("oh no {err}"),
             };
         }
+    }
 
 
+    #[test]
+
+    fn validate_json_serialization() {
+        let mut words: HashSet<String> = HashSet::new();
+        words.insert("ceiling".to_string());
+        words.insert("special".to_string());
+        words.insert("looking".to_string());
+        let length: usize = "ceiling".len();
+       // serialize_to_json(words, length);
     }
 
     #[test]
     fn construct_test_file() {
-        let path = "test3.json".to_string();
+        let path = "saved_words.json".to_string();
 
         let frumble: [Vec<std::string::String>; 12] = [
-            vec!["fire".to_string(),"soap".to_string()],                         //4
-            vec!["truck".to_string()],                              //5
-            vec!["wordle".to_string()],                              //6
+            vec!["fire".to_string(), "soap".to_string()],      //4
+            vec!["truck".to_string()],                         //5
+            vec!["wordle".to_string()],                        //6
             vec!["enemies".to_string(), "bracer".to_string()], //7
             vec!["".to_string()],                              //8
             vec!["".to_string()],                              //9
@@ -138,11 +199,17 @@ mod tests {
         let contents: WordsByLengths = WordsByLengths { lengths: frumble };
         let output = serialize_to_json(contents);
         //println!("{output}");
-        match write_to_file(output, path){
-            Ok(value)=>println!("file success!"),
-            Err(error)=>println!("file failure")
+        match write_to_file(output, path) {
+            Ok(value) => println!("file success!"),
+            Err(error) => println!("file failure"),
         }
     }
+    #[test]
+    fn test_debugging(){
+        let apples: Vec<i32> = vec![1,5,6,2,3,3];
+        println!("{}",apples.len());
+    }
+
 }
 
 /*{

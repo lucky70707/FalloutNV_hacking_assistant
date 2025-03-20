@@ -1,3 +1,6 @@
 /target
 test.txt
 test*.json
+saved_words.json
+
+.vscode/launch.json
