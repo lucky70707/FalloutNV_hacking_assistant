@@ -7,6 +7,9 @@ use std::{
 
 use serde_derive::{Deserialize, Serialize};
 
+
+///the words in the minigame have lengths ranging from 4 to 15 according to https://fallout.wiki/wiki/Hacking_(Fallout:_New_Vegas)
+
 #[derive(Serialize, Deserialize)]
 pub struct WordsByLengths {
     pub lengths: [Vec<String>; 12],
