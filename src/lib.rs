@@ -1,16 +1,19 @@
+mod serialization;
+
 use std::{
-    collections::hash_set,
+    
     error::Error,
     fs::{self, File},
     io::Write,
 };
+
 
 use std::{collections::HashSet, io};
 
 use serde_json::json;
 
 pub fn run() {
-    let unparsed_list = open_saved_words_file().unwrap();
+    //let unparsed_list = open_saved_words_file().unwrap();
     let instruction: String = "Write down all the words and write 'f' when finished".to_string();
     println!("{instruction}");
 
@@ -25,13 +28,16 @@ pub fn run() {
     }
 
     let output = serialize_to_json(words.clone(), length);
-    write_to_file(output);
+    match write_to_file(output){
+        Ok(())=>(),
+        Err(error)=>println!("problem writing to file: {error}"),
+    };
     println!("Pick a word and write the word here");
     let current_word = process_input();
     println!("How many letters were correct?");
     let amount_correct = process_input().parse::<i8>().unwrap();
 
-    let mut remaining_words = check_word_against_list(words, current_word, amount_correct);
+    let remaining_words = check_word_against_list(words, current_word, amount_correct);
 
     for word in &remaining_words {
         println!("{word}")
@@ -61,10 +67,10 @@ fn check_word_against_list(
     remaining_words_list
 }
 
-fn overwrite_words_json() {
+/*fn overwrite_words_json() {
     let filename = "saved_words2.json".to_string();
-    let mut file = File::create(filename);
-}
+    let file = File::create(filename);
+}*/
 
 //needs to deal with errors inside function, file not found error should be handled by creating the file
 fn open_saved_words_file() -> Result<String, Box<dyn Error>> {
@@ -88,7 +94,7 @@ fn serialize_to_json(words: HashSet<String>, length: usize) -> String {
 }
 
 fn write_to_file(output: String) -> std::io::Result<()> {
-    let mut file = File::create("test.txt")?;
+    let mut file = File::create("test.json")?;
     let output = output;
     println!("{output}");
     file.write_all(output.as_bytes())?;
@@ -130,17 +136,6 @@ fn process_input() -> String {
     input.trim().to_string()
 }
 
-/*
-fn get_words_by_length(length: usize, contents: String) -> Result<Vec<String>, String> {
-    let mut parsed = serde_json::Deserializer::from_str(&contents);
-    let index = format!("length{length}");
-    let array:  Vec<String> = parsed[index].members_mut().map(|value| value.to_string()).collect();
-
-
-    Ok(array)
-
-}*/
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -155,14 +150,7 @@ mod tests {
     fn input_validation_test() {
         let input = "healing".to_string();
         let length = input.len();
-    }
-
-    #[test]
-    fn test_get_words_by_length() {
-        let contents = open_saved_words_file().unwrap();
-        let result = get_words_by_length(7 as usize, contents).unwrap();
-        let expected_result = vec!["help".to_string()];
-        assert_eq!(result, expected_result);
+        assert_eq!(true,validate_single_word(&input, length))
     }
 
     #[test]
