@@ -5,17 +5,19 @@ mod serialization;
 
 use std::{collections::HashSet, io};
 
+use colored::Colorize;
 
 
-pub fn run() {  
+
+pub fn run_terminal() {  
     //let unparsed_list = open_saved_words_file().unwrap();
-    let instruction: String = "Write down all the words and write 'f' when finished".to_string();
+    let instruction: String = "Write down all the words and write 'F' when finished".green().to_string();
     println!("{instruction}");
 
     let mut input = process_input();
     let length: usize = input.len();
-    while input.len() < 4 ||input.len()>15{
-        if input.len()>4{
+    while input.len() < 4 && input.ne("F")||input.len()>15 && input.ne("F"){
+        if input.len()<4{
             println!("word is too short to be valid");
         }else {
             println!("word is too large to be valid");
@@ -34,7 +36,7 @@ pub fn run() {
 }
 
 fn solve(words: HashSet<String>){
-    println!("Pick a word and write the word here");
+    println!("{}","Pick a word and write the word here".green());
     let current_word = process_input();
     println!("How many letters were correct?");
     let amount_correct = process_input().parse::<i8>().unwrap();
@@ -42,17 +44,17 @@ fn solve(words: HashSet<String>){
     let mut remaining_words = check_word_against_list(words, current_word, amount_correct);
 
     while remaining_words.len()>1{
-        println!("Pick another word from the following list:");
+        println!("{}","Pick another word from the following list:".green());
         for word in &remaining_words{
-            println!("{word}");
+            println!("{}",word.bright_yellow());
         }
         let current_word = process_input();
-        println!("How many letters were correct?");
+        println!("{}","How many letters were correct?".green());
         let amount_correct = process_input().parse::<i8>().unwrap();
         remaining_words = check_word_against_list( HashSet::from_iter(remaining_words.iter().cloned()), current_word, amount_correct);
     }
     if remaining_words.len()==1{
-        println!("correct answer is {}", remaining_words.get(0).unwrap()
+        println!("correct answer is {}", remaining_words.get(0).unwrap().green().bold()
     );
     }else{
         println!("no valid answer");
@@ -115,7 +117,7 @@ fn process_input() -> String {
         .read_line(&mut input)
         .expect("Failed to read line");
     //the terminal will add characters even if you have only typed a single character, so we trim the input here
-    input.trim().to_string().to_ascii_uppercase()
+    input.trim().to_ascii_uppercase().to_string()
 }
 
 #[cfg(test)]
