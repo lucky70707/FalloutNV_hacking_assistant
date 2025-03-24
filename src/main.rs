@@ -11,5 +11,5 @@
 ///can test out efficacy of program with https://jetholt.com/hacking/
 
 fn main() {
-        fallout_hacking_assistant::run_tferminal();   
-    }
+    fallout_hacking_assistant::run_terminal();
+}

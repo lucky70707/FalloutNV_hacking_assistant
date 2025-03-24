@@ -2,15 +2,14 @@ use std::{
     collections::HashSet,
     error::Error,
     fs::{self, File},
-    io::{ ErrorKind, Write},
+    io::{ErrorKind, Write},
 };
 
 use serde_derive::{Deserialize, Serialize};
 
-
 ///the words in the minigame have lengths ranging from 4 to 15 according to https://fallout.wiki/wiki/Hacking_(Fallout:_New_Vegas)
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Default)]
 pub struct WordsByLengths {
     pub lengths: [Vec<String>; 12],
 }
@@ -19,8 +18,8 @@ impl WordsByLengths {
     pub fn get(&self, length: usize) -> &Vec<String> {
         &self.lengths[length - 4]
     }
-    pub fn set(&mut self, length: usize, list: Vec<String>){
-        self.lengths[length-4]=list;
+    pub fn set(&mut self, length: usize, list: Vec<String>) {
+        self.lengths[length - 4] = list;
     }
 }
 
@@ -29,35 +28,22 @@ impl WordsByLengths {
 pub fn open_saved_words_file(file: String) -> Result<String, Box<dyn Error>> {
     match fs::read_to_string(&file) {
         Ok(value) => Ok(value),
-        Err(err) => {if err.kind() == ErrorKind::NotFound{
-            create_empty_file(&file);
-            open_saved_words_file(file)
-        }else {
-            panic!("{err}");
-        }}        
+        Err(err) => {
+            if err.kind() == ErrorKind::NotFound {
+                create_empty_file(&file);
+                open_saved_words_file(file)
+            } else {
+                panic!("{err}");
+            }
+        }
     }
-    
 }
 
-fn create_empty_file(path: &String) {  
+fn create_empty_file(path: &String) {
     println!("creating empty file {path}");
-    let frumble: [Vec<std::string::String>; 12] = [
-        vec![], //4
-        vec![], //5
-        vec![], //6
-        vec![], //7
-        vec![], //8
-        vec![], //9
-        vec![], //10
-        vec![], //11
-        vec![], //12
-        vec![], //13
-        vec![], //14
-        vec![], //15
-    ];
-    let contents: WordsByLengths = WordsByLengths { lengths: frumble };
+    let contents: WordsByLengths = WordsByLengths::default();
     let output = serialize_to_json(contents);
-    
+
     match write_to_file(output, path.to_string()) {
         Ok(_value) => println!("file success!"),
         Err(_error) => println!("file failure"),
@@ -65,7 +51,6 @@ fn create_empty_file(path: &String) {
 }
 
 pub fn serialize_to_json(words: WordsByLengths) -> String {
-    
     let json_text = match serde_json::to_string_pretty(&words) {
         Err(err) => panic!("parsing failure: {err}"),
         Ok(value) => value,
@@ -77,7 +62,6 @@ pub fn serialize_to_json(words: WordsByLengths) -> String {
 pub fn write_to_file(output: String, path: String) -> std::io::Result<()> {
     let mut file = File::create(path)?;
     let output = output;
-    
 
     file.write_all(output.as_bytes())?;
 
@@ -110,9 +94,7 @@ pub fn process_user_inputted_words(words_inputted: HashSet<String>, word_length:
     if unique_words_length_at_start < unique_words_at_end {
         let uniqe_words_vec: Vec<String> = Vec::from_iter(unique_words.iter().cloned());
 
-        all_words.set(word_length, uniqe_words_vec);//I am watching you!
-        
-       
+        all_words.set(word_length, uniqe_words_vec); //I am watching you!
 
         let output = serialize_to_json(all_words);
 
@@ -125,7 +107,6 @@ pub fn process_user_inputted_words(words_inputted: HashSet<String>, word_length:
 
 #[cfg(test)]
 mod tests {
-    
 
     use super::*;
 
@@ -176,7 +157,6 @@ mod tests {
         }
     }
 
-
     #[test]
 
     fn validate_json_serialization() {
@@ -185,7 +165,7 @@ mod tests {
         words.insert("special".to_string());
         words.insert("looking".to_string());
         let length: usize = "ceiling".len();
-       // serialize_to_json(words, length);
+        // serialize_to_json(words, length);
     }
     #[ignore]
     #[test]
@@ -197,21 +177,18 @@ mod tests {
             vec!["truck".to_string()],                         //5
             vec!["wordle".to_string()],                        //6
             vec!["enemies".to_string(), "bracer".to_string()], //7
-            vec![],                              //8
-            vec![],                              //9
-            vec![],                              //10
-            vec![],                              //11
-            vec![],                              //12
-            vec![],                              //13
-            vec![],                              //14
-            vec![],                              //15
+            vec![],                                            //8
+            vec![],                                            //9
+            vec![],                                            //10
+            vec![],                                            //11
+            vec![],                                            //12
+            vec![],                                            //13
+            vec![],                                            //14
+            vec![],                                            //15
         ];
         let contents: WordsByLengths = WordsByLengths { lengths: frumble };
         let output = serialize_to_json(contents);
-        
+
         assert!(write_to_file(output, path).is_ok())
     }
-
 }
-
-
