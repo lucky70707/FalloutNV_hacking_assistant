@@ -17,4 +17,4 @@ serde_json = "1.0"
 #Leptos front end dependencies
 console_error_panic_hook = "0.1.7"
 leptos = { version = "0.7.8", features = ["csr"] }
-stylance = "0.5.5"
+
