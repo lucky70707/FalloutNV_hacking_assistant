@@ -1,0 +1,255 @@
+:root {
+    --background_color: rgb(0, 0, 0);
+    --section_color: #002f00;
+    --list_odd_color: #005f00;
+    --list_even_color: #000000;
+    --text_color: #00ee00;
+    --button_color: #005f00;
+
+    --button_hover: #008e00;
+    --monospace_font: "Lucida Console", "Courier New", monospace;
+
+}
+
+/*crt monitor effect*/
+body::before {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%,
+            rgba(0, 0, 0, 0.25) 50%),
+
+        linear-gradient(90deg,
+            rgba(255, 0, 0, 0.06),
+            rgba(0, 255, 0, 0.02),
+            rgba(0, 0, 255, 0.06));
+    z-index: 2;
+    background-size: 100% 4px, 3px 100%;
+    pointer-events: none;
+}
+
+
+button {
+    color: var(--text_color);
+    border: 2px solid transparent;
+    font-size: 20px;
+}
+
+button:hover {
+    border: 2px solid transparent;
+    background: linear-gradient(black, black) padding-box,
+        linear-gradient(var(--text_color), var(--text_color)) border-box;
+
+}
+
+
+
+h1 {
+    color: var(--text_color);
+    font-family: var(--monospace_font);
+    /*"Lucida Console", "Courier New", monospace;*/
+    text-align: center;
+}
+
+body {
+    background-color: var(--background_color);
+    text-align: left;
+    font-family: var(--monospace_font);
+    /* "Lucida Console", "Courier New", monospace;*/
+    color: var(--text_color);
+    font-size: 20px;
+
+
+}
+
+section {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+fieldset {
+    background-color: var(--section_color);
+    padding: 2em;
+    margin: 2em;
+    width: max-content;
+
+    border: 2px solid transparent;
+    background: linear-gradient(black, black) padding-box,
+        linear-gradient(0deg, var(--text_color) 0%, black 10% 90%, var(--text_color) 100%) border-box;
+
+}
+
+legend {
+    background-color: #000000;
+    font-size: 25px;
+}
+
+#section1 {
+    display: grid;
+
+    grid-template-areas:
+        'number number_label'
+        'word word'
+        'list_label list_label'
+        'list list'
+        'button button';
+    gap: 5px;
+}
+
+article>div {
+    padding: 20px 0;
+}
+
+.number {
+    grid-area: number;
+    width: auto;
+}
+
+.word {
+    grid-area: word;
+}
+
+.list {
+    grid-area: list;
+    height: 200px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+button {
+    grid-area: button;
+
+
+}
+
+#number_label {
+    grid-area: number_label;
+}
+
+#list_label {
+    grid-area: list_label;
+}
+
+ul {
+    list-style-type: lower-roman;
+    padding: 0;
+    margin: 0;
+    font-size: 20px
+}
+
+li {
+    background-color: var(--list_odd_color);
+    width: 100%;
+    text-align: start;
+    padding: 1%;
+}
+
+li:nth-child(even) {
+    background-color: var(--list_even_color);
+}
+
+#section2 {
+    display: grid;
+
+    grid-template-areas:
+        'guess_input guess_input'
+        'correct_input correct_label'
+        'submit submit'
+        'remaining_label remaining_label'
+        'list list'
+        'btnRestart btnRestart'
+    ;
+    gap: 5px;
+
+}
+
+#guess_input {
+    grid-area: guess_input;
+}
+
+#correct_input {
+    grid-area: correct_input;
+}
+
+#correct_label {
+    grid-area: correct_label;
+}
+
+#remaining_label {
+    grid-area: remaining_label;
+}
+
+#selection {
+    grid-area: selection;
+}
+
+#btnRestart {
+    grid-area: btnRestart;
+}
+
+#submit {
+    grid-area: submit;
+}
+
+input {
+    background-color: var(--section_color);
+    border: none;
+    color: var(--text_color);
+    border-radius: 3px;
+    font-size: 20px;
+    padding-left: 10px;
+}
+
+input:hover {
+    background-color: var(--button_color);
+}
+
+::placeholder {
+    font-family: var(--monospace_font);
+
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+    height: 30px;
+    align-self: center;
+    width: min-content;
+}
+
+button {
+    background: linear-gradient(black, black) padding-box,
+        linear-gradient(90deg, var(--text_color) 0%, black 10% 90%, var(--text_color) 100%) border-box;
+
+}
+
+.flex-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+#btnHelp {
+    padding: 0 10px 0 10px;
+    background: linear-gradient(black, black) padding-box,
+        linear-gradient(90deg, var(--text_color) 0%, black 25% 75%, var(--text_color) 100%) border-box;
+    height: fit-content;
+    align-self: center;
+}
+
+#btnHelp:hover {
+    border: 2px solid transparent;
+    background: linear-gradient(black, black) padding-box,
+        linear-gradient(var(--text_color), var(--text_color)) border-box;
+}
