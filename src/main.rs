@@ -1,3 +1,4 @@
+use leptos::prelude::*;
 //TODO
 //[x] function that gets all values from saved_words.json or creates saved_words.json if it doesn't exist
 //[x] the values from the array that equal the length of user words being added are to be converted into a hashset
@@ -5,11 +6,20 @@
 //[x] the updated list of values should be saved together with the old values of other lengths
 //[x] core functionality for the assistance should be added.
 //[x] move functionality to lib.rs and other files
-//[ ] add GUI functionality using slint
+//[ ] add GUI functionality using leptos
 
 ///NOTE
 ///can test out efficacy of program with https://jetholt.com/hacking/
+/// 
 
-fn main() {
+
+
+
+
+
+fn main()   {
     fallout_hacking_assistant::run_terminal();
+    
+
 }
+

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Fallout Hacking Assistant</title>
+    <link rel="stylesheet" href="style.css"/>
+    <link data-trunk rel="css" href="style.css" />
+</head>
+
+<body>
+    <header class="flex-container">
+        <h1>Fallout Hacking Assistant</h1>
+        <button id="btnHelp">HELP</button>
+    </header>
+    
+    <section>
+        <fieldset id="section1">
+            <legend>Input</legend>
+            <input placeholder="0" type="number" class="number" min="4" max="5"  maxlength="2"/>
+            <p id="number_label">4-15</p>
+            <input placeholder="Word input" class="word" minlength="4" maxlength="15" />
+            <p id="list_label">Current words:</p>
+            <ul class="list">
+               
+            </ul>
+            <button>FINISHED</button>
+        </fieldset>
+        <fieldset id="section2">
+            <legend>Guessing</legend>
+            <input id="guess_input" placeholder="current guess" minlength="4" maxlength="15" />
+            <input id="correct_input" type="number" placeholder="0" min="0" max="15"  maxlength="15" />
+            <p id="correct_label">/ 15 correct.</p>
+            <button id="submit">SUBMIT</button>
+            <p id="remaining_label">Remaining words:</p>
+            <ul class="list">
+               
+            </ul>
+            <button id="btnRestart">RESTART</button>
+        </fieldset>
+    </section>
+
+    <article id="articleHelp">
+        <p>This assistant will help you solve the hacking minigame from fallout 3, new vegas, 4 and 76. I highly recommend first clicking 1 word in the minigame before continuing just in case it's immediately correct. If it is not, proceed by filling in all the words displayed in the terminal you're hacking. You can first fill in the wordt length otherwise it will be filled in automatically upon filling in your first word. All the filled in words will be displayed under "current words:". Upon filling in all the words on the terminal, press the [FINISHED] button and proceed to the Guessing form. Fill in the word you guessed and the amount correct. Press the [SUBMIT] button afterwards and the list will shrink accordingly. You can then pick a word from the remaining words list to guess in-game. Repeat this until the password is correct or you're locked out. Press the [RESTART] button to begin the process all over again.</p>
+    </article>
+</body>
+
+</html>
