@@ -1,9 +1,12 @@
 mod serialization;
+mod app;
 
 use std::{collections::HashSet, io};
 use colored::Colorize;
 
-
+pub fn run_gui(){
+    app::run_gui();
+}
 
 pub fn run_terminal() {  
     //let unparsed_list = open_saved_words_file().unwrap();
