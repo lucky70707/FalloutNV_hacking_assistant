@@ -92,7 +92,7 @@ legend {
     display: grid;
 
     grid-template-areas:
-        'number number_label'
+        'number_label number_label'
         'word word'
         'list_label list_label'
         'list list'
