@@ -47,10 +47,10 @@ fn solve(words: HashSet<String>){
         for word in &remaining_words{
             println!("{}",word.bright_yellow());
         }
-        let current_word = process_input();
+        let guessed_word = process_input();
         println!("{}","How many letters were correct?".green());
         let amount_correct = process_input().parse::<u8>().unwrap();
-        remaining_words = check_word_against_list( remaining_words, current_word, amount_correct);
+        remaining_words.retain(|word| {exact_overlap(word.to_string(), &guessed_word, amount_correct)});
     }
     if remaining_words.len()==1{
         println!("correct answer is {}", remaining_words.iter().next().unwrap().green().bold()
