@@ -31,8 +31,8 @@ fn App() -> impl IntoView {
     </Header>
     <section>
         <Fieldset render_prop=|| view! { <legend>Input</legend>  } id="section1".to_string()>
-            <NumberInput id = "wordlength".to_string() min = 4 max = 15/>
-            <p id="number_label">4-15</p>
+            <NumberInput id="length".to_string() min = 4 max = 15/>
+            <p id="number_label">"4-15"</p>
             <WordInput id="wordInput".to_string() placeholder="Word input".to_string() minlength=4 maxlength= 15/>
             <p id="list_label">Current words:</p>
             <UnorderedList>
@@ -44,7 +44,7 @@ fn App() -> impl IntoView {
         <Fieldset render_prop=|| view! { <legend>Guessing</legend>  } id="section2".to_string()>
             <WordInput id="guess_input".to_string() placeholder="Current guess".to_string() minlength=4 maxlength=15/>
             <NumberInput id="correct_input".to_string() min=0 max=15 />
-            <p id="correct_label">/ 15 correct.</p>
+            <p id="correct_label">"/ 15 correct."</p>
             <Button on_click=move |_| do_nothing() id= "btnSubmit".to_string() text="SUBMIT".to_string()/>
             <p id="remaining_label">Remaining words:</p>
             <UnorderedList>
@@ -131,14 +131,14 @@ where
 #[component]
 pub fn NumberInput(id: String, min: u8, max: u8) -> impl IntoView {
     view! {
-        <input class="number" type="number" id = id placeholder="0" min=min max=max/>
+        <input id=id class="number" type="number" placeholder="0" min=min max=max maxlength=2/>
     }
 }
 
 #[component]
 pub fn WordInput(id: String, placeholder: String, minlength: u8, maxlength: u8) -> impl IntoView {
     view! {
-        <input type="text" id = id placeholder=placeholder.to_string() minlength=minlength maxlength=maxlength/>
+        <input class="word" type="text" id = id placeholder=placeholder.to_string() minlength=minlength maxlength=maxlength/>
     }
 }
 
