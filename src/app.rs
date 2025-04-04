@@ -1,7 +1,7 @@
 use std::collections::HashSet;
 
 use leptos::{
-    ev::{input, MouseEvent, SubmitEvent},
+    ev::{ MouseEvent, SubmitEvent},
     html::{self},
     
     prelude::*,
@@ -43,7 +43,7 @@ fn App() -> impl IntoView {
     let append_word_list = move |ev: SubmitEvent| {
         ev.prevent_default();
 
-        let mut input_word = word_input_element
+        let input_word = word_input_element
             .get()
             .expect("<input> should be mounted")
             .value().to_uppercase();
@@ -144,7 +144,7 @@ fn App() -> impl IntoView {
     </article>
     }
 }
-fn do_nothing() {}
+
 #[component]
 fn Header<F, IV>(
     /// Takes a function (type F) that returns anything that can be
@@ -209,13 +209,6 @@ where
         {render_prop()}
         {children()}
         </fieldset>
-    }
-}
-
-#[component]
-pub fn NumberInput(id: String, min: u8, max: u8) -> impl IntoView {
-    view! {
-        <input id=id class="number" type="number" placeholder="0" min=min max=max maxlength=2/>
     }
 }
 
