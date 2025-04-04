@@ -228,6 +228,3 @@ pub fn UnorderedList(wordlist: ReadSignal<HashSet<String>>) -> impl IntoView {
     }
 }
 
-//todo input length should change min and max for word input
-//word input should fill the contents of the list on enter it should also fill in the length of the word in the number input
-//
