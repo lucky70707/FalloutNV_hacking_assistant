@@ -191,7 +191,7 @@ li:nth-child(even) {
     grid-area: btnRestart;
 }
 
-#submit {
+#btnSubmit {
     grid-area: submit;
 }
 
