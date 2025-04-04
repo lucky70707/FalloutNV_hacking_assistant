@@ -38,7 +38,7 @@ fn solve(words: HashSet<String>){
     println!("{}","Pick a word and write the word here".green());
     let current_word = process_input();
     println!("How many letters were correct?");
-    let amount_correct = process_input().parse::<i8>().unwrap();
+    let amount_correct = process_input().parse::<u8>().unwrap();
 
     let mut remaining_words = check_word_against_list(words, current_word, amount_correct);
 
@@ -49,11 +49,11 @@ fn solve(words: HashSet<String>){
         }
         let current_word = process_input();
         println!("{}","How many letters were correct?".green());
-        let amount_correct = process_input().parse::<i8>().unwrap();
-        remaining_words = check_word_against_list( HashSet::from_iter(remaining_words.iter().cloned()), current_word, amount_correct);
+        let amount_correct = process_input().parse::<u8>().unwrap();
+        remaining_words = check_word_against_list( remaining_words, current_word, amount_correct);
     }
     if remaining_words.len()==1{
-        println!("correct answer is {}", remaining_words.get(0).unwrap().green().bold()
+        println!("correct answer is {}", remaining_words.iter().next().unwrap().green().bold()
     );
     }else{
         println!("no valid answer");
@@ -61,22 +61,22 @@ fn solve(words: HashSet<String>){
 
 }
 
-fn check_word_against_list(
+pub fn check_word_against_list(
     words: HashSet<String>,
     current_word: String,
-    amount_correct: i8,
-) -> Vec<String> {
-    let mut remaining_words_list: Vec<String> = Vec::new();
+    amount_correct: u8,
+) -> HashSet<String> {
+    let mut remaining_words_list: HashSet<String> = HashSet::new();
 
     for word in words {
-        let mut overlap_count: i8 = 0;
+        let mut overlap_count: u8 = 0;
         for i in 0..word.len() {
             if word.chars().nth(i) == current_word.chars().nth(i) {
                 overlap_count += 1;
             }
         }
         if overlap_count == amount_correct {
-            remaining_words_list.push(word);
+            remaining_words_list.insert(word);
         }
     }
     remaining_words_list
