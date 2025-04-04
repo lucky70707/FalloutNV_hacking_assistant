@@ -96,6 +96,9 @@ fn App() -> impl IntoView {
         word_input_element.get().unwrap().set_value(value);
         guess_input_element.get().unwrap().set_value(value);
         correct_input_element.get().unwrap().set_value(value);
+
+        min_wordlength.1.set(0);
+        max_wordlength.1.set(15);
     };
 
     view! {
