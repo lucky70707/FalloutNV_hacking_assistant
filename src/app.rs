@@ -30,9 +30,8 @@ fn App() -> impl IntoView {
         <ToggleButton setter=set_toggled id="btnHelp".to_string() text="HELP".to_string()> </ToggleButton>
     </Header>
     <section>
-        <Fieldset render_prop=|| view! { <legend>Input</legend>  } id="section1".to_string()>
-            <NumberInput id="length".to_string() min = 4 max = 15/>
-            <p id="number_label">"4-15"</p>
+        <Fieldset render_prop=|| view! { <legend>Input</legend>  } id="section1".to_string()>            
+            <p id="number_label">"4-15 characters"</p>
             <WordInput id="wordInput".to_string() placeholder="Word input".to_string() minlength=4 maxlength= 15/>
             <p id="list_label">Current words:</p>
             <UnorderedList>
@@ -42,10 +41,13 @@ fn App() -> impl IntoView {
         </Fieldset>
 
         <Fieldset render_prop=|| view! { <legend>Guessing</legend>  } id="section2".to_string()>
+            <form id="formGuess".to_string()>
             <WordInput id="guess_input".to_string() placeholder="Current guess".to_string() minlength=4 maxlength=15/>
             <NumberInput id="correct_input".to_string() min=0 max=15 />
             <p id="correct_label">"/ 15 correct."</p>
             <Button on_click=move |_| do_nothing() id= "btnSubmit".to_string() text="SUBMIT".to_string()/>
+            
+            </form>
             <p id="remaining_label">Remaining words:</p>
             <UnorderedList>
                 {test_list2}
@@ -154,3 +156,26 @@ pub fn UnorderedList(children: ChildrenFragment) -> impl IntoView {
         <ul class="list">{children}</ul>
     }
 }
+
+#[component]
+pub fn FormNumberInput()->impl IntoView{
+
+    let input_element: NodeRef<html::Input> = NodeRef::new();
+
+    let set_word_length = move |ev: SubmitEvent|{
+        ev.prevent_default();
+
+        let value = input_element.get().expect("<input> should be mounted").value();
+        
+    };
+
+    view! {
+        <form id="formLengthInput" on:submit=set_word_length>
+
+        </form>
+    }
+}
+
+//todo input length should change min and max for word input
+//word input should fill the contents of the list on enter it should also fill in the length of the word in the number input
+//
