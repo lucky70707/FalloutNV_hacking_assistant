@@ -265,3 +265,7 @@ button {
     background: linear-gradient(black, black) padding-box,
         linear-gradient(var(--text_color), var(--text_color)) border-box;
 }
+
+article>p{
+    white-space: pre;
+}
