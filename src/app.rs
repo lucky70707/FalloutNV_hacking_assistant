@@ -46,7 +46,7 @@ fn App() -> impl IntoView {
         let mut input_word = word_input_element
             .get()
             .expect("<input> should be mounted")
-            .value();
+            .value().to_uppercase();
 
         if current_word_list.get().len() == 0 {
             let length = input_word.len() as u8;
@@ -75,7 +75,7 @@ fn App() -> impl IntoView {
         let guess_word = guess_input_element
             .get()
             .expect("<input id=\"guess_input\"> should be mounted")
-            .value();
+            .value().to_uppercase();
         let amount_correct: String = correct_input_element
             .get()
             .expect("<input id=\"correct_input\"> should be mounted")
