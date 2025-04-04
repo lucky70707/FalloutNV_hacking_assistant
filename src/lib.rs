@@ -62,26 +62,23 @@ fn solve(words: HashSet<String>){
 }
 
 pub fn check_word_against_list(
-    words: HashSet<String>,
-    current_word: String,
+    mut words: HashSet<String>,
+    guessed_word: String,
     amount_correct: u8,
 ) -> HashSet<String> {
-    let mut remaining_words_list: HashSet<String> = HashSet::new();
+    words.retain( |word| {exact_overlap(word.to_string(), &guessed_word, amount_correct)});
+    words
+}
 
-    for word in words {
-        let mut overlap_count: u8 = 0;
+fn exact_overlap(word:String, guessed_word:&str, amount_correct: u8)->bool{
+    let mut overlap_count: u8 = 0;
         for i in 0..word.len() {
-            if word.chars().nth(i) == current_word.chars().nth(i) {
+            if word.chars().nth(i) == guessed_word.chars().nth(i) {
                 overlap_count += 1;
             }
         }
-        if overlap_count == amount_correct {
-            remaining_words_list.insert(word);
-        }
-    }
-    remaining_words_list
+    overlap_count==amount_correct
 }
-
 
 
 fn validate_words_input(input: String, length: usize) -> HashSet<String> {
