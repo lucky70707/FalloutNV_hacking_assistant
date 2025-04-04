@@ -16,9 +16,12 @@
     <section>
         <fieldset id="section1">
             <legend>Input</legend>
-            <input placeholder="0" type="number" class="number" min="4" max="15"  maxlength="2"/>
+            <form id="formLengthInput"><input placeholder="0" type="number" class="number" min="4" max="15"  maxlength="2"/></form>
+            
             <p id="number_label">4-15</p>
-            <input placeholder="Word input" class="word" minlength="4" maxlength="15" />
+            <form id = "formWordInput"><input placeholder="Word input" class="word" minlength="4" maxlength="15" /></form>
+                 
+
             <p id="list_label">Current words:</p>
             <ul class="list">
                
@@ -28,10 +31,13 @@
 
         <fieldset id="section2">
             <legend>Guessing</legend>
-            <input id="guess_input" placeholder="current guess" minlength="4" maxlength="15" />
-            <input id="correct_input" type="number" placeholder="0" min="0" max="15"  maxlength="15" />
-            <p id="correct_label">/ 15 correct.</p>
-            <button id="btnSubmit">SUBMIT</button>
+            <form id="formGuess">
+                <input id="guess_input" placeholder="current guess" minlength="4" maxlength="15" />
+                <input id="correct_input" type="number" placeholder="0" min="0" max="15"  maxlength="15" />
+                <p id="correct_label">/ 15 correct.</p>
+                <button id="btnSubmit">SUBMIT</button>
+            </form>
+            
             <p id="remaining_label">Remaining words:</p>
             <ul class="list">
                

@@ -104,12 +104,17 @@ article>div {
     padding: 20px 0;
 }
 
-.number {
-    grid-area: number;
-    width: auto;
+form {
+    height: min-content;
+    width: min-content;
+    align-self: center;
 }
 
-.word {
+#formLengthInput {
+    grid-area: number;
+}
+
+#formWordInput {
     grid-area: word;
 }
 
@@ -156,15 +161,22 @@ li:nth-child(even) {
     display: grid;
 
     grid-template-areas:
-        'guess_input guess_input'
-        'correct_input correct_label'
-        'submit submit'
+    'form form'
         'remaining_label remaining_label'
         'list list'
         'btnRestart btnRestart'
     ;
     gap: 5px;
 
+}
+
+#formGuess {
+    display: grid;
+    grid-template-areas:
+        'guess_input guess_input'
+        'correct_input correct_label'
+        'submit submit';
+    grid-area: form;    
 }
 
 #guess_input {

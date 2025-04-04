@@ -2,5 +2,5 @@
 test.txt
 test*.json
 saved_words.json
-
+/dist
 .vscode/launch.json
